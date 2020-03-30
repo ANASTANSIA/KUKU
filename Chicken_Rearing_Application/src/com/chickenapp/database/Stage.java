@@ -1,10 +1,13 @@
 package com.chickenapp.database;
 
-public class Stage {
-	public String stageId;
+import java.io.Serializable;
+
+public class Stage implements Serializable{
+	public int stageId;
 	public String stageName;
 	public int startTime;
 	public int endTime;
+	private int programId;
 	
 	public Stage() {
 		super();
@@ -18,7 +21,7 @@ public class Stage {
 		this.endTime = endTime;
 	}
 
-	public Stage(String stageId, String stageName, int startTime, int endTime) {
+	public Stage(int stageId, String stageName, int startTime, int endTime) {
 		super();
 		this.stageId = stageId;
 		this.stageName = stageName;
@@ -26,12 +29,21 @@ public class Stage {
 		this.endTime = endTime;
 	}
 
-	public String getStageId() {
+	public Stage(String stageName, int startTime,int endTime, int programId) {
+		super();
+		this.stageName = stageName;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.programId=programId;
+		
+	}
+
+	public int getStageId() {
 		return stageId;
 	}
 
-	public void setStageId(String stageId) {
-		this.stageId = stageId;
+	public int setStageId(int stageId) {
+		return this.stageId = stageId;
 	}
 
 	public String getStageName() {

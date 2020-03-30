@@ -10,13 +10,15 @@ import java.util.List;
 import com.chickenapp.database.DatabaseConnection;
 import com.chickenapp.database.Program;
 
-public class ProgramDao implements DatabaseConnection{
-	private String insertQuery="insert into program (programName,description) values (?,?)";
-	private String UpdateQuery="update program set programName=?,description=? where programId=?"; 
+public class ProgramDao {
+	private String insertQuery="insert into program (programName,programDescription) values (?,?)";
+	private String UpdateQuery="update program set programName=?,programDescription=? where programId=?"; 
 	private String deleteAllQuery="delete * from program";
 	private String deleteByIdQuery="delete from product where programId=?";
 	private String selectByIdQuery="select * from program where programId=?";
-	private String selectAllQuery="select * from program ";
+	private String selectByIdQuery2="select programId from program where programName=?";
+	private String selectAllQuery="select * from program";
+	
 	
 	ResultSet rs;
 	PreparedStatement ps;
@@ -33,12 +35,18 @@ public class ProgramDao implements DatabaseConnection{
         try{  
             
             ps.setString(1,program.getProgramName());  
-            ps.setString(2,program.getDescription());  
+            
+            ps.setString(2,program.getProgramDescription()); 
+          //  System.out.println(program.getProgramDescription()+" descriptor");
+            
+             
             
             ps.executeUpdate();  
               
              
-        }catch(Exception ex){ex.printStackTrace();}  
+        }catch(Exception ex){
+        	System.out.println("Cant create a program");
+        	ex.printStackTrace();}  
           
         return program;  
     } 
@@ -49,7 +57,7 @@ public class ProgramDao implements DatabaseConnection{
         try{  
 
             ps.setString(1,program.getProgramName());
-            ps.setString(2,program.getDescription());  
+            ps.setString(2,program.getProgramDescription());  
             ps.executeUpdate();  
               
               
@@ -74,42 +82,87 @@ public class ProgramDao implements DatabaseConnection{
     }
     
     
-	public Program getProgramById(int id){  
+	public int getProgramId(String programName){  
         Program program=new Program();  
-          rs=dao.readfromDb(selectByIdQuery);
+        int programId=0;
+          rs=dao.readfromDb(selectByIdQuery2);
         try{  
              
-            ps.setInt(1,id);  
-            rs=ps.executeQuery();  
+            //rs.executeQuery();  
             if(rs.next()){  
-            	program.setProgramName(rs.getString(1));
-            	program.setDescription(rs.getString(2));
+            	program.setProgramId(rs.getInt(1));
+//            	program.setProgramDescription(rs.getString(2));
             	  
                
+            }   }catch(Exception ex){ex.printStackTrace();}  
+        
+      return programId;  
+  }  
+	 
+            public int getProgramById(){  
+                Program program=new Program(); 
+                int programId=0;
+                  rs=dao.readfromDb(selectByIdQuery2);
+                try{  
+                     
+                    //rs.executeQuery();  
+                    if(rs.next()){  
+                    	programId = rs.getInt("programId");
+//                    	program.setProgramDescription(rs.getString(2));
+                    	  
+                       
+                    }   }catch(Exception ex){ex.printStackTrace();}  
+                
+                return programId;  
             }  
+        	
             
-        }catch(Exception ex){ex.printStackTrace();}  
-          
-        return program;  
-    }  
+      
+	public List<Integer> getprogramId(){
+		List<Integer> idList= new ArrayList<>();
+		rs=dao.readfromDb(selectAllQuery);
+		try{  
+            
+	           rs=ps.executeQuery();  
+	            while(rs.next()){  
+	                Program program=new Program(); 
+	                program.setProgramName(rs.getString(1));
+	                program.setProgramDescription(rs.getString(2));
+	                idList.add(rs.getInt(0));  
+	            } 
+		}catch(Exception ex) {
+	            	ex.printStackTrace();
+	            }
+		
+		return idList;
+		
+	}
     public  List<Program> getAllPrograms(){  
         List<Program> programList=new ArrayList<>(); 
-        rs=dao.readfromDb(selectAllQuery);
-          
+        Dao dao = new Dao();
+        Connection con = dao.connect();
+        //rs=dao.readfromDb(selectAllQuery);
+          //System.out.println(rs);
         try{  
-             
-           rs=ps.executeQuery();  
+           ps = con.prepareStatement(selectAllQuery);
+           //dao.insertToDb(selectAllQuery);
+           rs=ps.executeQuery(); 
             while(rs.next()){  
                 Program program=new Program(); 
-                program.setProgramName(rs.getString(1));
-                program.setDescription(rs.getString(2));
+                program.setProgramId(rs.getInt("programId"));
+                program.setProgramName(rs.getString("programName"));
+                program.setProgramDescription(rs.getString("programDescription"));
                 programList.add(program);  
             }  
               
-        }catch(Exception c){c.printStackTrace();}  
+        }catch(Exception c){
+        	//System.out.println("Error");
+        	c.printStackTrace();
+        	}  
           
         return programList;  
     }  
+    
 	
 
 }

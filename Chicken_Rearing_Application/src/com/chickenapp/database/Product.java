@@ -3,12 +3,13 @@ package com.chickenapp.database;
 
 
 public class Product {
-	public int id;
+	public int productId;
 	public  String description;
 	public int productQuantity;
 	public float productPrice;
 	public String productType;
-	public String productImagepath;
+	public String imagePath;
+	public int userId;
 	
 	
 	public Product() {
@@ -19,27 +20,27 @@ public class Product {
 	
 
 
-	public Product(int id, String description, int productQuantity, float productPrice, String productType,
-			String productImagepath) {
+	public Product(int productId, String description, int productQuantity, float productPrice, String productType,
+			String imagePath) {
 		super();
-		this.id = id;
+		this.productId = productId;
 		this.description = description;
 		this.productQuantity = productQuantity;
 		this.productPrice = productPrice;
-		this.productType = productType;
-		this.productImagepath = productImagepath;
+		this.productType=productType;
+		this.imagePath=imagePath;
 	}
 
 
 
 
-	public Product(String productType, String description, int productQuantity, float productPrice,String productImagePath) {
+	public Product(String productType, String description, int productQuantity, float productPrice,String imagePath) {
 		super();
 		this.productType = productType;
 		this.description = description;
 		this.productQuantity =productQuantity;
 		this.productPrice = productPrice;
-		this.productImagepath= productImagePath;
+		this.imagePath= imagePath;
 		
 	}
 	
@@ -47,34 +48,55 @@ public class Product {
 	
 
 
-	public int getId() {
-		return id;
+	public Product(String productType, String description, int quantity, Float price, String fileName, int userId) {
+		// TODO Auto-generated constructor stub
 	}
 
 
 
 
-	public void setId(int id) {
-		this.id = id;
+	public int getProductId() {
+		return productId;
 	}
 
 
 
 
-	public void setProductImagepath(String productImagepath) {
-		this.productImagepath = productImagepath;
+	public void setProductId(int id) {
+		this.productId = productId;
+	}
+
+
+
+//
+//	public void setProductImagepath(String imagePath) {
+//		this.imagePath = imagePath;
+//	}
+
+
+
+
+	public int getUserId() {
+		return userId;
 	}
 
 
 
 
-	public String getProductImagepath() {
-		return productImagepath;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 
-	public void setProductImagePath(String productImagepath) {
-		this.productImagepath = productImagepath;
+
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 

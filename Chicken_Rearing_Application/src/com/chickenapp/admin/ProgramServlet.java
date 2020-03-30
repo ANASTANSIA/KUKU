@@ -1,6 +1,8 @@
 package com.chickenapp.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,31 +30,81 @@ public class ProgramServlet extends HttpServlet {
     public ProgramServlet() {
         super();
     }
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		doGet(request, response);
 		String programName=request.getParameter("programName");
-		String description=request.getParameter("description");
+		String programDescription=request.getParameter("programDescription");
+		
+		//System.out.println(programName);
+        //System.out.println(programDescription);
 		
 		ProgramDao programdao=new ProgramDao();
-		Program program= new Program(programName, description);
+		Program program= new Program(programName, programDescription);
 		
 		 try {
 	              programdao.saveProgram(program);
-	            String destPage = "login.jsp";
-	           
-	            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-	            dispatcher.forward(request, response);
+
+	      	
+	              System.out.println("nice it worked");
+					response.sendRedirect("viewPrograms.jsp");
+				
 	             
 	        } catch (Exception ex) {
+	        	//System.out.println("Program Sservlet not working");
 	            ex.printStackTrace();
 	        }
+		
+	
 	}
-
 }
+
+	
+//	private void addToDb(HttpServletRequest request, HttpServletResponse response) {
+//		String programName=request.getParameter("programName");
+//		String programDescription=request.getParameter("programDescription");
+//		
+//		//System.out.println(programName);
+//        //System.out.println(programDescription);
+//		
+//		ProgramDao programdao=new ProgramDao();
+//		Program program= new Program(programName, programDescription);
+//		
+//		 try {
+//	              programdao.saveProgram(program);
+//
+//	      	
+//	              System.out.println("nice it worked");
+//					response.sendRedirect("advertisedProducts.html");
+//				
+//	             
+//	        } catch (Exception ex) {
+//	        	System.out.println("Program Sservlet not working");
+//	            ex.printStackTrace();
+//	        }
+//		
+	
+//	private List<Program> retrieveFromDb(HttpServletRequest request, HttpServletResponse response) {
+//		ProgramDao programdao=new ProgramDao();
+//		List<Program> programList=programdao.getAllPrograms();
+//		//Program program= new Program(programName, programDescription);
+//		
+//		try {
+//	   
+//		HttpSession session= request.getSession();
+//		 session.setAttribute("programList", programList);
+//			response.sendRedirect("AdminMainIndex.jsp");
+//			
+//			
+//		}catch(Exception ex) {
+//			ex.printStackTrace();
+//			System.out.println("Cannot retrieve the programs from database");
+//			
+//		}
+//		return programList;
+//		
+//	}
+
+

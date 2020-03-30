@@ -49,7 +49,7 @@ public class Dao {
 		try {
 			
 			st=con.createStatement();
-			rs=st.executeQuery(sql);
+//			rs=st.executeQuery(sql);
 			
 		}catch(Exception e) {
 			e.printStackTrace();

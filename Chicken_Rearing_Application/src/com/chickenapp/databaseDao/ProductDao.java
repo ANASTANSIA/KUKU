@@ -29,18 +29,22 @@ public class ProductDao  {
 
  public Product saveProduct(Product product){  
          ps=dao.insertToDb(insertProductQuery);
+         //Product product= new Product();
         try{  
        
             ps.setString(1,product.getProductType());  
             ps.setString(2,product.getDescription());  
             ps.setInt(3,product.getProductQuantity());
             ps.setFloat(4,product.getProductPrice());
-            ps.setString(5,product.getProductImagepath());
-            
+            ps.setString(5,product.getImagePath());
+            ps.setInt(5,product.getUserId());
+            System.out.println(product.getProductType());
             ps.executeUpdate();  
               
               
-        }catch(Exception ex){ex.printStackTrace();}  
+        }catch(Exception ex){
+        	System.out.println("ProductDao error");
+        	ex.printStackTrace();}  
           
         return product;  
     }
@@ -57,7 +61,7 @@ public class ProductDao  {
                 String description = rs.getString("decription");
                 int quantity =Integer.parseInt(rs.getString("productQuantity"));
                 float price=Float.parseFloat(rs.getString("productPrice"));
-                String imagePath=rs.getString("productImagePath");
+                String imagePath=rs.getString("imagePath");
                
                 product= new Product( productType,description , quantity,price,imagePath);
             }
@@ -70,11 +74,11 @@ public class ProductDao  {
   public Product updateProduct(Product product) throws SQLException {
         ps=dao.insertToDb(updateProductQuery);
         try  {
-        	ps.setInt(4, product.getId());
+        	ps.setInt(4, product.getProductId());
         	ps.setString(2, product.getDescription());
             ps.setInt(3, product.getProductQuantity());
             ps.setFloat(5,product.getProductPrice());
-            ps.setString(6,product.getProductImagepath());
+            ps.setString(6,product.getImagePath());
            
 
             ps.executeUpdate();
@@ -101,8 +105,8 @@ public class ProductDao  {
                 String description= rs.getString("description");
                 int quantity = rs.getInt("productQuantity");
                 float price=rs.getFloat("productPrice");
-                String imagepath=rs.getString("productImagePath");
-                product.add(new Product( productType, description,quantity,price,imagepath));
+                String imagePath=rs.getString("imagePath");
+                product.add(new Product( productType, description,quantity,price,imagePath));
             }
         } catch (SQLException e) {
            e.printStackTrace();
@@ -120,8 +124,8 @@ public class ProductDao  {
          String description= rs.getString("description");
          int quantity = rs.getInt("productQuantity");
          float price=rs.getFloat("productPrice");
-         String imagepath=rs.getString("productImagePath");
-         searchedProduct.add(new Product( productType, description,quantity,price,imagepath));
+         String imagePath=rs.getString("imagePath");
+         searchedProduct.add(new Product( productType, description,quantity,price,imagePath));
 		 
 	 }catch(Exception ex) {
 		 ex.printStackTrace();

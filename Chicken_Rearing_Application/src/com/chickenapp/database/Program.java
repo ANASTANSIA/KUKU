@@ -1,28 +1,29 @@
 package com.chickenapp.database;
 
-public class Program {
+import java.io.Serializable;
+
+public class Program implements Serializable{
     int programId;
-	String description;
+	String programDescription;
 	String programName;
 	public Program() {
-		super();
-
+		
 	}
 	
 
 
-	public Program(int programId, String description, String programName) {
+	public Program(int programId, String programDescription, String programName) {
 		super();
 		this.programId = programId;
-		this.description = description;
+		this.programDescription = programDescription;
 		this.programName = programName;
 	}
 
 
 
-	public Program(String description, String programName) {
+	public Program(String programDescription, String programName) {
 		super();
-		this.description = description;
+		this.programDescription = programDescription;
 		this.programName = programName;
 	}
 	
@@ -33,11 +34,11 @@ public class Program {
 	public void setProgramId(int programId) {
 		this.programId = programId;
 	}
-	public String getDescription() {
-		return description;
+	public String getProgramDescription() {
+		return programDescription;
 	}
-	public void setDescription(String description) {
-		this.description =description;
+	public void setProgramDescription(String programDescription) {
+		this.programDescription =programDescription;
 	}
 	public String getProgramName() {
 		return programName;

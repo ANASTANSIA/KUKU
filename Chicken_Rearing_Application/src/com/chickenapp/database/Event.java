@@ -2,24 +2,38 @@ package com.chickenapp.database;
 
 public class Event {
 
-	public String description;
+	public String eventDescription;
+	public int stageId;
 
 	public Event() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Event(String description) {
+	public Event(String eventDescription) {
 		super();
-		this.description = description;
+		this.eventDescription = eventDescription;
+	}
+	
+
+	public int getStageId() {
+		return stageId;
 	}
 
-	public String getDescription() {
-		return description;
+	public void setStageId(int stageId) {
+		this.stageId = stageId;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public Event(String eventDescription, int stageId) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getEventDescription() {
+		return eventDescription;
+	}
+
+	public void setEventDescription(String eventDescription) {
+		this.eventDescription = eventDescription;
 	}
 	
 }

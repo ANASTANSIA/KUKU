@@ -10,6 +10,7 @@ import java.util.List;
 import com.chickenapp.database.DatabaseConnection;
 import com.chickenapp.database.Event;
 import com.chickenapp.database.Program;
+import com.chickenapp.database.Stage;
 import com.chickenapp.database.User;
 
 public class EventDao  {
@@ -25,13 +26,15 @@ public class EventDao  {
 	String updateQuery="update event set description=? where id=?";
 	String deleteQuery="delete from event where eventId=?";
 	String getEventQuery=  "select * from event where eventId=?";
-	String allEventsQuery="select * from event";
+	String allEventsQuery="select * from event where stageId=?";
 	
     public  Event saveEvent(Event event){  
-        ps= dao.insertToDb(sql); 
+    	Dao dao = new Dao();
+        Connection con = dao.connect();
+        
         try{  
-           
-            ps.setString(1, event.getDescription());
+           ps=con.prepareStatement(sql);
+            ps.setString(1, event.getEventDescription());
             ps.executeUpdate();  
               
              
@@ -41,9 +44,14 @@ public class EventDao  {
     } 
     
     public Event  update(Event event){  
-        ps=dao.insertToDb(updateQuery); 
+    	
+    	Dao dao = new Dao();
+        Connection con = dao.connect();
+        
+       
         try{ 
-            ps.setString(1,event.getDescription());
+        	ps = con.prepareStatement(updateQuery);
+            ps.setString(1,event.getEventDescription());
           
             ps.executeUpdate();  
            
@@ -53,8 +61,13 @@ public class EventDao  {
     }  
     public Event delete(int id){  
     	Event event=null;
-         ps=dao.insertToDb(deleteQuery);
-        try{   
+    	Dao dao = new Dao();
+        Connection con = dao.connect();
+        
+    	
+        //ps=dao.insertToDb(deleteQuery);
+        try{ 
+        	ps=con.prepareStatement(deleteQuery);
             ps.setInt(1,id);  
            ps.executeUpdate();  
               
@@ -68,13 +81,17 @@ public class EventDao  {
     
     
 	public  Event getEventById(int id){  
-		Event event= new Event();  
-		rs=dao.readfromDb(getEventQuery);
+		Event event= new Event(); 
+
+        Dao dao = new Dao();
+        Connection con = dao.connect();
+		
         try{   
+        	ps = con.prepareStatement(getEventQuery);
             ps.setInt(1,id);  
             ResultSet rs=ps.executeQuery();  
             if(rs.next()){ 
-            	event.setDescription(rs.getString(1));
+            	event.setEventDescription(rs.getString(1));
             }  
              
         }catch(Exception ex){ex.printStackTrace();
@@ -83,22 +100,30 @@ public class EventDao  {
           
         return event;  
     }  
-    public  List<Event> getAllEvents(){  
-        List<Event> eventList=new ArrayList<>(); 
-        rs=dao.readfromDb(allEventsQuery);
+   
+    public  List<Event> getAllEvents(int stageId){  
+        List<Event> eventList=new ArrayList<>();  
+        
+        Dao dao = new Dao();
+        Connection con = dao.connect();
+          //rs=dao.readfromDb(selectAllQuery);
+        
           
         try{  
-           
-            ResultSet rs=ps.executeQuery();  
+        	ps = con.prepareStatement(allEventsQuery);
+        	ps.setInt(1,stageId);  
+            rs=ps.executeQuery();  
+            //System.out.println(programId);
             while(rs.next()){  
-            	Event event= new Event();
-            	event.setDescription(rs.getString(1));
-                 
-            }
+                Event event = new Event(); 
+                event.setEventDescription(rs.getString("eventDescription"));
+                eventList.add(event);
+            }  
+              
         }catch(Exception c){
+        	//System.out.println("Error");
         	c.printStackTrace();
-        	System.out.println("cant retrieve all events");
-        	} 
+        	}  
           
         return eventList;  
     }  

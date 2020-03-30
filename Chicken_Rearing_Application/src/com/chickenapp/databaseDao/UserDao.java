@@ -11,10 +11,20 @@ public class UserDao {
 	
 	private ResultSet rs;
 	private static PreparedStatement ps;
+	
 	Dao dao = new Dao();
 	User user = new User();
 	String sql = "insert into user(username ,email,password) values(?,?,?)";
-	String LogInQuery="SELECT * FROM user WHERE email = ? and password = ?";
+	String LogInQuery="SELECT * FROM user WHERE username=? and password=?";
+	String CountUsers="Select COUNT(*) from user";
+	
+//Count number of Users
+	public void countUsers() {
+		//int totalSignUps=0;
+		rs=dao.readfromDb(CountUsers);
+		
+		
+	}
 
 	public User saveUser(User user) throws ClassNotFoundException {
 		
@@ -34,24 +44,22 @@ public class UserDao {
 			return user; 
 			
 	    }
-	public User checkLogin(String username ,String password) {
-		rs=dao.readfromDb(LogInQuery);
+	public boolean checkLoginO(String username ,String password) {
+		//rs=dao.readfromDb(LogInQuery);
 		
+		//System.out.println(username+password);
+		Dao dao = new Dao();
+        Connection con = dao.connect();
 		try {
-			
+			ps = con.prepareStatement(LogInQuery);
 			ps.setString(1, username);
-	        ps.setString(2, password);
-	 
-	        rs = ps.executeQuery();
-	 
-	        User user = null;
-	 
-	        if (rs.next()) {
-	            user = new User();
-	            user.setUsername(rs.getString(2));
-	            user.setPassword(rs.getString(3));
-	            
-	            
+			ps.setString(2, password);
+			
+			rs = ps.executeQuery();
+	        if(rs.next()) {
+	        	return true;
+	        }else {
+	        	return false;
 	        }
 		}catch(Exception e){
 			e.printStackTrace();
@@ -59,10 +67,42 @@ public class UserDao {
 		}
 		
 		
-		return user;
+		return true;
 		
 	}
-	
+	public String checkLogin(String username ,String password) {
+		//rs=dao.readfromDb(LogInQuery);
+
+		String userNameDB = "";
+		String passwordDB = "";
+		
+		Dao dao = new Dao();
+        Connection con = dao.connect();
+		try {
+			ps = con.prepareStatement(LogInQuery);
+			ps.setString(1, username);
+			ps.setString(2, password);
+			
+			rs = ps.executeQuery();
+			while(rs.next()) {
+			
+			userNameDB = rs.getString("username");
+			passwordDB =rs.getString("password");
+			//roleDB = resultSet.getString("role");
+			if(username.equals("Herod") && password.equals("herodEncrypted12345")) {
+				return "admin";
+			}
+			if(username.equals(userNameDB)&& password.equals(passwordDB)) {
+				return "User";
+			}
+			
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return "Invalid User Credential";
+	}
+	 
 	 
 
 
